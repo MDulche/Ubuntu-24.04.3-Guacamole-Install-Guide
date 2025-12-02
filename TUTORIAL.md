@@ -730,21 +730,6 @@ Enjoy secure remote access! 🚀
 
 ---
 
-## Support & Issues
-
-**Having problems?**
-
-1. Check [TROUBLESHOOTING.md](TROUBLESHOOTING.md) first
-2. Review relevant logs
-3. Verify all prerequisites are met
-4. Open GitHub Issue with:
-   - Ubuntu version
-   - Full error message
-   - Steps completed
-   - Where you got stuck
-
----
-
 **Last Updated**: December 3, 2025  
 **Version**: 1.0.0  
 **Status**: Production Ready ✅
