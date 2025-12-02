@@ -730,21 +730,6 @@ Bon accès distant sécurisé ! 🚀
 
 ---
 
-## Support et problèmes
-
-**Avez-vous des problèmes ?**
-
-1. Consultez d'abord [TROUBLESHOOTING.md](TROUBLESHOOTING.md)
-2. Vérifiez les logs pertinents
-3. Assurez-vous que tous les prérequis sont satisfaits
-4. Ouvrez un problème GitHub avec :
-   - Version d'Ubuntu
-   - Message d'erreur complet
-   - Étapes complétées
-   - L'étape où vous avez rencontré un problème
-
----
-
 **Dernière mise à jour** : 3 décembre 2025  
 **Version** : 1.0.0  
 **Statut** : Prêt pour la production ✅
