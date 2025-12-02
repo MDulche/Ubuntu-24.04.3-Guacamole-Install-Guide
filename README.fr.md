@@ -382,7 +382,7 @@ Ce tutoriel et toute la documentation sont fournis sous la **Licence MIT**.
 ```
 Licence MIT
 
-Copyright (c) 2025 [Votre nom]
+Copyright (c) 2025 [Maxence Dulche]
 
 Par la présente, toute personne obtenant une copie de ce logiciel et 
 des fichiers de documentation associés (le « Logiciel ») est autorisée 
