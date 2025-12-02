@@ -1,13 +1,24 @@
-# Tutoriel Complet : Apache Guacamole 1.6.0 sur Ubuntu Server 24.04.3 (ESXi)
+# Tutoriel Complet d'Installation d'Apache Guacamole 1.6.0
 
-**Dernière mise à jour : Décembre 2025**
-**Versions utilisées :**
-- Ubuntu Server 24.04.3 (Minimized)
-- Apache Guacamole 1.6.0
-- Tomcat 9 (via dépôt Jammy 22.04)
-- MariaDB 10.11 (installation et initialisation complète)
-- MySQL Connector/J 9.5.0
-- nginx 1.24 + Let's Encrypt (Certbot)
+[English](TUTORIAL.md) | **Français**
+
+**Dernière mise à jour** : 3 décembre 2025  
+**Statut** : Prêt pour la production ✅
+
+---
+
+## Table des matières
+
+1. [Prérequis et préparation](#prérequis-et-préparation)
+2. [Installation des dépendances](#installation-des-dépendances)
+3. [Installation du serveur Apache Guacamole](#installation-du-serveur-apache-guacamole)
+4. [Configuration du répertoire Guacamole](#configuration-du-répertoire-guacamole)
+5. [Installation de Tomcat 9 via le dépôt Jammy](#installation-de-tomcat-9-via-le-dépôt-jammy)
+6. [Installation du client Apache Guacamole](#installation-du-client-apache-guacamole)
+7. [Installation et configuration de MariaDB](#installation-et-configuration-de-mariadb)
+8. [Premiers pas et configuration initiale](#premiers-pas-et-configuration-initiale)
+9. [Améliorations de l'installation](#améliorations-de-linstallation)
+10. [Configuration du proxy inverse nginx avec SSL/TLS](#configuration-du-proxy-inverse-nginx-avec-ssltls)
 
 ---
 
@@ -18,28 +29,13 @@
 | **IP VM Guacamole** | `192.168.1.100` |
 | **Domaine** | `guacamole.example.com` |
 | **IP publique** | `203.0.113.45` |
-| **DB User** | `gua_admin` |
-| **DB Password** | `SecurePass2025!` |
-| **DB Name** | `guacamole_db` |
+| **Utilisateur BD** | `gua_admin` |
+| **Mot de passe BD** | `SecurePass2025!` |
+| **Nom BD** | `guacamole_db` |
 | **Email Let's Encrypt** | `admin@example.com` |
-| **Routeur/Bbox IP** | `192.168.1.1` |
+| **IP Routeur/Bbox** | `192.168.1.1` |
 
-**⚠️ À adapter à votre installation !**
-
----
-
-## Table des matières
-
-1. [Prérequis et préparation](#prérequis-et-préparation)
-2. [Installation des dépendances](#installation-des-dépendances)
-3. [Installation d'Apache Guacamole Server](#installation-dapache-guacamole-server)
-4. [Configuration du répertoire Guacamole](#configuration-du-répertoire-guacamole)
-5. [Installation de Tomcat 9 via dépôt Jammy](#installation-de-tomcat-9-via-dépôt-jammy)
-6. [Installation d'Apache Guacamole Client](#installation-dapache-guacamole-client)
-7. [Installation et configuration de MariaDB](#installation-et-configuration-de-mariadb)
-8. [Premiers pas et configuration initiale](#premiers-pas-et-configuration-initiale)
-9. [Amélioration de l'installation](#amélioration-de-linstallation)
-10. [Configuration du Reverse Proxy nginx avec SSL/TLS](#configuration-du-reverse-proxy-nginx-avec-ssltls)
+⚠️ **Adaptez ces valeurs à votre environnement !**
 
 ---
 
@@ -48,14 +44,14 @@
 ### Configuration minimale recommandée
 - **CPU** : 2 vCores
 - **RAM** : 4 GB (minimum 2 GB)
-- **Disque** : 50 GB (20 GB minimum)
-- **IP** : `192.168.1.100` (statique - à adapter)
+- **Disque** : 50 GB (minimum 20 GB)
+- **IP** : `192.168.1.100` (statique - à adapter à votre réseau)
 - **OS** : Ubuntu Server 24.04.3 LTS Minimized
 
 ### Préparation initiale de la VM sur ESXi
 
 1. Créer une nouvelle VM Ubuntu Server 24.04.3 Minimized
-2. Attribuer la ressource minimale recommandée ci-dessus
+2. Allouer les ressources minimales recommandées ci-dessus
 3. Assigner l'adresse IP statique : `192.168.1.100` (adapter à votre réseau)
 4. Vérifier la connectivité réseau
 
@@ -88,7 +84,7 @@ sudo apt update
 sudo apt upgrade -y
 ```
 
-Installation de tous les paquets indispensables pour Apache Guacamole. **Important :** Ne pas installer `mariadb-server` dans cette étape :
+Installation de tous les paquets indispensables pour Apache Guacamole. **Important** : Ne pas installer `mariadb-server` dans cette étape :
 
 ```bash
 sudo apt-get install -y build-essential libcairo2-dev libjpeg-turbo8-dev \
@@ -104,7 +100,7 @@ Attendre la fin de l'installation complète.
 
 ---
 
-## Installation d'Apache Guacamole Server
+## Installation du serveur Apache Guacamole
 
 ### Étape 1 : Télécharger les sources
 
@@ -167,7 +163,7 @@ ls -la /etc/guacamole/
 
 ---
 
-## Installation de Tomcat 9 via dépôt Jammy
+## Installation de Tomcat 9 via le dépôt Jammy
 
 ### Ajouter le dépôt Jammy (22.04)
 
@@ -199,7 +195,7 @@ curl http://localhost:8080/
 
 ---
 
-## Installation d'Apache Guacamole Client
+## Installation du client Apache Guacamole
 
 ### Télécharger le fichier WAR
 
@@ -271,7 +267,7 @@ sudo mysql_secure_installation
 ```
 
 Répondre aux questions :
-- Password root : Entrer un mot de passe robuste (ex: `MariaDBRoot2025!`)
+- Mot de passe root : Entrer un mot de passe robuste (ex: `MariaDBRoot2025!`)
 - Switch to unix_socket : `n`
 - Remove anonymous users : `Y`
 - Disable root login remotely : `Y`
@@ -319,7 +315,7 @@ cd /tmp/guacamole-auth-jdbc-1.6.0/mysql/schema/
 cat *.sql | sudo mysql -u root -p guacamole_db
 ```
 
-### Configurer Guacamole.properties
+### Configurer guacamole.properties
 
 ```bash
 sudo nano /etc/guacamole/guacamole.properties
@@ -328,7 +324,7 @@ sudo nano /etc/guacamole/guacamole.properties
 Ajouter :
 
 ```properties
-# MySQL Configuration
+# Configuration MySQL
 mysql-hostname: 127.0.0.1
 mysql-port: 3306
 mysql-database: guacamole_db
@@ -336,7 +332,7 @@ mysql-username: gua_admin
 mysql-password: SecurePass2025!
 ```
 
-Enregistrer (Ctrl+X, Y, Enter).
+Enregistrer (Ctrl+X, Y, Entrée).
 
 ### Configurer guacd.conf
 
@@ -393,7 +389,7 @@ Identifiants par défaut :
 
 1. **Paramètres** → **Connexions** → **Nouveau groupe**
 2. **Nom** : `Serveurs Production`
-3. **Type** : `Organizational`
+3. **Type** : `Organisationnel`
 4. Cliquer sur **Créer**
 
 ### Ajouter une connexion RDP
@@ -405,9 +401,9 @@ Identifiants par défaut :
    - **Protocole** : `RDP`
    - **Nom d'hôte** : `192.168.1.50`
    - **Port** : `3389`
-   - **Identifiant** : `ADMIN`
+   - **Nom d'utilisateur** : `ADMIN`
    - **Mot de passe** : `YourWindowsPassword123!`
-   - **Agencement clavier** : `Français (Azerty)`
+   - **Disposition clavier** : `Français (Azerty)`
    - **Fuseau horaire** : `Europe/Paris`
    - **Ignorer le certificat du serveur** : ✓ (si auto-signé)
 3. Cliquer sur **Créer**
@@ -421,19 +417,19 @@ Identifiants par défaut :
    - **Protocole** : `SSH`
    - **Nom d'hôte** : `192.168.1.51`
    - **Port** : `22`
-   - **Identifiant** : `root`
+   - **Nom d'utilisateur** : `root`
    - **Mot de passe** : `LinuxPassword2025!`
 3. Cliquer sur **Créer**
 
 ---
 
-## Configuration du Reverse Proxy nginx avec SSL/TLS
+## Configuration du proxy inverse nginx avec SSL/TLS
 
 ### Prérequis
 
 - Domaine DNS : `guacamole.example.com`
 - IP publique : `203.0.113.45`
-- Accès DNS (ex: Godaddy, Namecheap, etc.)
+- Accès DNS (ex: GoDaddy, Namecheap, etc.)
 - Routeur/Bbox accessible
 
 ### Étape 1 : Configurer le DNS
@@ -448,15 +444,15 @@ Valeur : 203.0.113.45
 TTL : 3600
 ```
 
-Vérifier propagation (10-15 min) :
+Vérifier la propagation (10-15 min) :
 
 ```bash
 nslookup guacamole.example.com
 ```
 
-### Étape 2 : Configurer la redirection Bbox/Routeur
+### Étape 2 : Configurer la redirection de ports sur le routeur/Bbox
 
-Sur votre **Bbox/Routeur** (`192.168.1.1`) :
+Sur votre **Routeur/Bbox** (`192.168.1.1`) :
 
 **Redirection 1** :
 ```
@@ -472,9 +468,9 @@ Port interne : 443
 IP locale : 192.168.1.100
 ```
 
-**IMPORTANT** : Désactiver "Accès à distance de la Bbox" sur port 443.
+**IMPORTANT** : Désactiver "Accès à distance de la Bbox" sur le port 443.
 
-Redémarrer le routeur et attendre 2-3 min.
+Redémarrer le routeur et attendre 2-3 minutes.
 
 ### Étape 3 : Installer nginx et Certbot
 
@@ -517,7 +513,7 @@ Redémarrer les services :
 sudo systemctl start nginx tomcat9
 ```
 
-### Étape 5 : Configurer nginx comme reverse proxy
+### Étape 5 : Configurer nginx en tant que proxy inverse
 
 ```bash
 sudo tee /etc/nginx/sites-available/guacamole > /dev/null << 'EOF'
@@ -591,7 +587,7 @@ sudo certbot certificates
 
 ---
 
-## Étape 7 : Firewall (accès interne uniquement)
+## Étape 7 : Pare-feu (accès interne uniquement)
 
 Si vous ne voulez **pas d'accès externe** :
 
@@ -639,7 +635,7 @@ sudo systemctl status tomcat9 guacd mariadb nginx
 sudo systemctl restart tomcat9 guacd mariadb nginx
 ```
 
-### Vérifier les ports
+### Vérifier les ports en écoute
 
 ```bash
 sudo ss -tulpn | grep -E '80|443|3306|4822|8080'
@@ -669,7 +665,7 @@ sudo systemctl restart tomcat9
 sleep 15
 ```
 
-### Erreur 404 nginx
+### nginx retourne 404
 
 ```bash
 sudo rm /etc/nginx/sites-enabled/default
@@ -683,7 +679,7 @@ sudo certbot renew --force-renewal
 sudo systemctl restart nginx
 ```
 
-### Vérifier la BD
+### Vérifier la base de données
 
 ```bash
 sudo mysql -u root -p
@@ -693,12 +689,62 @@ EXIT;
 
 ---
 
+## Liste de vérification après installation
+
+Après l'installation, vérifiez :
+
+```bash
+# 1. Services en cours d'exécution
+sudo systemctl status tomcat9 guacd mariadb nginx
+
+# 2. Certificat valide
+sudo certbot certificates
+
+# 3. Auto-renouvellement actif
+sudo systemctl status certbot.timer
+
+# 4. Ports en écoute
+sudo ss -tulpn | grep -E '80|443|3306|4822|8080'
+
+# 5. Base de données accessible
+sudo mysql -u root -p -e "SHOW DATABASES;"
+
+# 6. Tester la redirection HTTP → HTTPS
+curl -I http://guacamole.example.com/
+
+# 7. Tester l'accès HTTPS
+curl -I https://guacamole.example.com/ 2>/dev/null | grep "HTTP"
+```
+
+---
+
 ## Conclusion
 
 ✅ Apache Guacamole 1.6.0 installé
 ✅ HTTPS sécurisé avec Let's Encrypt
 ✅ Certificat auto-renouvelable
-✅ Accès interne protégé par firewall
+✅ Accès interne protégé par pare-feu
 ✅ Prêt pour la production
 
 Bon accès distant sécurisé ! 🚀
+
+---
+
+## Support et problèmes
+
+**Avez-vous des problèmes ?**
+
+1. Consultez d'abord [TROUBLESHOOTING.md](TROUBLESHOOTING.md)
+2. Vérifiez les logs pertinents
+3. Assurez-vous que tous les prérequis sont satisfaits
+4. Ouvrez un problème GitHub avec :
+   - Version d'Ubuntu
+   - Message d'erreur complet
+   - Étapes complétées
+   - L'étape où vous avez rencontré un problème
+
+---
+
+**Dernière mise à jour** : 3 décembre 2025  
+**Version** : 1.0.0  
+**Statut** : Prêt pour la production ✅
