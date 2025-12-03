@@ -136,19 +136,19 @@ For detailed instructions, see the **complete tutorial** in this repository.
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                        INTERNET                              │
+│                        INTERNET                             │
 └───────────────────────┬─────────────────────────────────────┘
                         │ Port 80/443 (Public IP)
                         ▼
             ┌───────────────────────┐
-            │  Router/Firewall │
+            │  Router/Firewall      │
             │  192.168.1.1          │
             └───────────┬───────────┘
                         │ Port Forwarding
                         │ 80→80, 443→443
                         ▼
             ┌───────────────────────┐
-            │  nginx Reverse Proxy   │
+            │  nginx Reverse Proxy  │
             │  192.168.1.100:80/443 │
             │  - SSL/TLS            │
             │  - Let's Encrypt      │
